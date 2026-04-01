@@ -1,3 +1,5 @@
+import csv
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -8,7 +10,17 @@ soup = BeautifulSoup(response.content, "html.parser")
 books = soup.find_all("article", {"class": "product_pod"})
 
 # print(books)
-for book in books:
-    title = book.h3.a["title"]
-    price = book.find("p", {"class": "price_color"}).text
-    print(f"{title} - {price}")
+# for book in books:
+#     title = book.h3.a["title"]
+#     price = book.find("p", {"class": "price_color"}).text
+#     print(f"{title} - {price}")
+
+with open("books.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Title", "Price","Author", "Publisher",  "URL"])
+    for book in books:
+        title = book.h3.a["title"]
+        price = book.find("p", {"class": "price_color"}).text
+        writer.writerow([title, price])
+
+print("Done")
